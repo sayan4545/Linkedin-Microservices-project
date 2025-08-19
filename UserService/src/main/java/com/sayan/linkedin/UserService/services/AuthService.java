@@ -1,5 +1,6 @@
 package com.sayan.linkedin.UserService.services;
 
+import com.sayan.linkedin.UserService.dtos.LoginRequestDto;
 import com.sayan.linkedin.UserService.dtos.SignUpRequestDto;
 import com.sayan.linkedin.UserService.dtos.UserDto;
 import com.sayan.linkedin.UserService.entities.UserEntity;
@@ -18,6 +19,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final JwtService jwtService;
 
     public UserDto signUp(SignUpRequestDto signUpRequestDto) {
         log.info("Signup user with email : {}",signUpRequestDto.getEmail());
@@ -29,7 +31,17 @@ public class AuthService {
         userEntity = userRepository.save(userEntity);
 
         return modelMapper.map(userEntity, UserDto.class);
+    }
 
+    public String login(LoginRequestDto loginRequestDto){
+        log.info("Logging in with user with email {}",loginRequestDto.getEmail());
+        UserEntity user = userRepository.findByEmail(loginRequestDto.getEmail())
+                .orElseThrow(()-> new BadCredentialsExceptions("either username or password is incorrect"));
+        // check if password matches or not
+        boolean isMatchedPassword = Bcrypt.check(loginRequestDto.getPassword(),user.getPassword());
+        if(!isMatchedPassword) throw new BadCredentialsExceptions("either username or password is incorrect");
+
+        return jwtService.generateAccessToken(user);
 
     }
 }

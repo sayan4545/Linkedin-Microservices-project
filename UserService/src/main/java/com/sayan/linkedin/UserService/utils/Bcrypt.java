@@ -7,7 +7,7 @@ public class Bcrypt {
         return BCrypt.hashpw(s,BCrypt.gensalt());
     }
 
-    public boolean check(String s, String hashedS){
+    public static  boolean check(String s, String hashedS){
         return BCrypt.checkpw(s,hashedS);
 
     }
