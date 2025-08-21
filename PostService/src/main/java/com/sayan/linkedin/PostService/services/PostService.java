@@ -1,5 +1,6 @@
 package com.sayan.linkedin.PostService.services;
 
+import com.sayan.linkedin.PostService.auth.AuthContextHolder;
 import com.sayan.linkedin.PostService.dtos.PostCreationRequestDTO;
 import com.sayan.linkedin.PostService.dtos.PostDTO;
 import com.sayan.linkedin.PostService.entities.Post;
@@ -28,6 +29,7 @@ public class PostService {
 
     public PostDTO getPostById(Long postId){
         log.info("retrieving post by a particular postId : {}",postId);
+        Long userId = AuthContextHolder.getCurrentUserId();
         Post post = postRepository.findById(postId)
                 .orElseThrow(()-> new ResourceNotFoundException("Post not found with id : "+postId));
         return modelMapper.map(post, PostDTO.class);
