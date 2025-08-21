@@ -20,11 +20,12 @@ public class PostLikeService {
 
     @Transactional
     public void likePost(Long postId) {
-        Long userId = 1l;//
-        log.info("Getting the post from the userId {} and postId {}", userId,postId);
+        // TODO: Extract userId from authentication context instead of hardcoding
+        Long userId = 1L; // Temporary hardcoded value, should be replaced with actual user ID from auth
+        log.info("Getting the post from the userId {} and postId {}", userId, postId);
         Post post = postRepository.findById(postId).orElseThrow(()-> new ResourceNotFoundException("no post exist by this is : "+ postId));
 
-        boolean isAlreadyLiked = postLikeRepository.existsByUserIdandPostId(userId,postId);
+        boolean isAlreadyLiked = postLikeRepository.existsByUserIdAndPostId(userId,postId);
         if(isAlreadyLiked) throw new BadCredentialsExceptions("Already liked");
         PostLike postLike = new PostLike();
         postLike.setPostId(postId);
@@ -37,11 +38,12 @@ public class PostLikeService {
 
     @Transactional
     public void unlikePost(Long postId) {
-        Long userId = 1l;
-        log.info("Getting the post from the userId {} and postId {}", userId,postId);
+        // TODO: Extract userId from authentication context instead of hardcoding
+        Long userId = 1L; // Temporary hardcoded value, should be replaced with actual user ID from auth
+        log.info("Getting the post from the userId {} and postId {}", userId, postId);
         Post post = postRepository.findById(postId).orElseThrow(()-> new ResourceNotFoundException("no post exist by this is : "+ postId));
 
-        boolean isAlreadyLiked = postLikeRepository.existsByUserIdandPostId(userId,postId);
+        boolean isAlreadyLiked = postLikeRepository.existsByUserIdAndPostId(userId,postId);
         if(!isAlreadyLiked) throw new BadCredentialsExceptions("Cannot unlike a post that is not liked");
         postLikeRepository.deleteByUserIdAndPostId(userId,postId);
 

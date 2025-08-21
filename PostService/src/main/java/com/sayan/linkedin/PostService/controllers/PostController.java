@@ -18,9 +18,10 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<PostDTO> createPost(@RequestBody PostCreationRequestDTO postCreationRequestDTO, HttpServletRequest request){
-        PostDTO postDTO = postService.createPost(postCreationRequestDTO,1L);
+        // TODO: Extract userId from authentication context instead of hardcoding
+        Long userId = 1L; // Temporary hardcoded value, should be replaced with actual user ID from auth
+        PostDTO postDTO = postService.createPost(postCreationRequestDTO, userId);
         return new ResponseEntity<>(postDTO, HttpStatus.CREATED);
-
     }
 
     @GetMapping("/users/{userId}/getAllPosts")
