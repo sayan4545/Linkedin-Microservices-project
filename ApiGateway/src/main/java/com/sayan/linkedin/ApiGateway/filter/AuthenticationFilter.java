@@ -35,7 +35,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             try{
                 String userId = jwtService.getUserIdFromToken(token);
                 ServerWebExchange mutatedExchange = exchange.mutate()
-                        .request(r->r.header("X-User_id",userId))
+                        .request(r->r.header("X-User-Id",userId))
                         .build();
                 return chain.filter(mutatedExchange);
 
